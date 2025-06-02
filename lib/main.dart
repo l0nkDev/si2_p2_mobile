@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:si2_p2_mobile/constants.dart';
 import 'package:si2_p2_mobile/firebase_api.dart';
 import 'package:si2_p2_mobile/firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -53,7 +54,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
 var selectedIndex = 1;
-var product = 0;
+var pk = 0;
+var _class = 0;
 bool isLogged = false;
 late SharedPreferences prefs;
 String token = "";
@@ -65,9 +67,9 @@ String refreshToken = "";
     prefs.setString('token', token);
   }
 
-  void goto(int n, {int y = 0}) { setState(() { 
-    print("y: $y | n: $n");
-    product = y;
+  void goto(int n, {int pk = 0, int cl = 0}) { setState(() { 
+    this.pk = pk;
+    _class = cl;
     selectedIndex = n; 
   }); }
 
@@ -85,20 +87,19 @@ String refreshToken = "";
   }
 
   logout() async {
-    await http.post(Uri.http("l0nk5erver.duckdns.org:5000", 'auth/logout'), 
+    await http.post(Uri.parse('${Constants.API_ENDPOINT}auth/logout/'), 
       headers: {HttpHeaders.authorizationHeader: "Bearer $token", HttpHeaders.contentTypeHeader: 'application/json'},
       body: 
-      '''
-        {
-          "fcm": "${await FirebaseApi().initNotifications()}"
-        }
-    '''
+        '''{
+             "fcm": "${await FirebaseApi().initNotifications()}"
+           }'''
     );
     token = ""; 
     isLogged = false;
     prefs.setString('token', '');
     selectedIndex = 0; 
     setState(() {});
+    goto(1);
   }
 
   @override
@@ -110,11 +111,11 @@ String refreshToken = "";
     case 1:
       page = Login(setToken, goto);
     case 2:
-      page = Assistance(token, goto);
+      page = Assistance(token, goto, pk, _class);
     case 3:
-      page = Grades(token, goto);
+      page = Grades(token, goto, pk, _class);
     case 4:
-      page = Participation(token, goto);
+      page = Participation(token, goto, pk, _class);
     case 5:
       page = Login(setToken, goto);
     case 6:

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:si2_p2_mobile/constants.dart';
+import 'package:si2_p2_mobile/firebase_api.dart';
 
 class Login extends StatelessWidget{
   final Function setToken;
@@ -18,20 +19,23 @@ class Login extends StatelessWidget{
     
       var response = await http.post(Uri.parse('${Constants.API_ENDPOINT}auth/login/'), 
       headers: headers,
-      body: 
+      body:
       '''
-        {
+      {
           "login": "$login",
-          "password": "$password"
-        }
-    '''
+          "password": "$password",
+          "fcm": "${await FirebaseApi().initNotifications()}"
+      }
+      '''
     );
     if (response.statusCode == 200) {
       print(response.body);
       var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Sesión iniciada correctamente.")),
-      );
+      if (decodedResponse['role'] != 'S') {
+      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text("Inicia sesión como estudiante por favor.")));
+      return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text("Sesión iniciada correctamente.")));
       setToken(decodedResponse["access_token"]);
       goto(0);
     }
