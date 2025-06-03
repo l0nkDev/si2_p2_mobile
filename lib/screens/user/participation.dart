@@ -45,30 +45,34 @@ class _AssistanceState extends State<Participation> {
           SizedBox(height: 32,),
           Text("Historial de participaciones", style: style),
           SizedBox(height: 32,),
-          FutureBuilder (future: participationFuture, builder: (context, snapshot) { if (snapshot.hasData) { final items = snapshot.data;
-            if (items == null) return Text('item is null');
-            print(items);
-              return Column(
-                children: [
-                  Container(alignment: Alignment.center, height: 32, width: 384, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text("${items['rude']} | ${items['lname']} ${items['name']}")),
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    Container(alignment: Alignment.center, height: 32, width: 128, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text("Fecha")),
-                    Container(alignment: Alignment.center, height: 32, width: 128, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text("Descripción")),
-                    Container(alignment: Alignment.center, height: 32, width: 128, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text("Nota")),
-                  ],),
-                  ListView.builder(shrinkWrap: true, itemCount: items['participations'].length, itemBuilder: (context, index) {
-                    final item = items['participations'][index];
-                    return Row( mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(alignment: Alignment.center, height: 64, width: 128, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text(item['date'])),
-                        Container(alignment: Alignment.center, height: 64, width: 128, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text(item['description'])),
-                        Container(alignment: Alignment.center, height: 64, width: 128, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text("${item['score']}")),
-                      ],
-                    );
-                  }),
-                ],
-              );
-            } else {return Text('no data');}}
+          Expanded(
+            child: FutureBuilder (future: participationFuture, builder: (context, snapshot) { if (snapshot.hasData) { final items = snapshot.data;
+              if (items == null) return Text('item is null');
+              print(items);
+                return Column(
+                  children: [
+                    Container(alignment: Alignment.center, height: 32, width: 384, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text("${items['rude']} | ${items['lname']} ${items['name']}")),
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                      Container(alignment: Alignment.center, height: 32, width: 128, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text("Fecha")),
+                      Container(alignment: Alignment.center, height: 32, width: 128, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text("Descripción")),
+                      Container(alignment: Alignment.center, height: 32, width: 128, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text("Nota")),
+                    ],),
+                    Expanded(
+                      child: ListView.builder(shrinkWrap: true, itemCount: items['participations'].length, itemBuilder: (context, index) {
+                        final item = items['participations'][index];
+                        return Row( mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(alignment: Alignment.center, height: 64, width: 128, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text(item['date'])),
+                            Container(alignment: Alignment.center, height: 64, width: 128, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text(item['description'])),
+                            Container(alignment: Alignment.center, height: 64, width: 128, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text("${item['score']}")),
+                          ],
+                        );
+                      }),
+                    ),
+                  ],
+                );
+              } else {return Text('no data');}}
+            ),
           ),
         ],
       ),

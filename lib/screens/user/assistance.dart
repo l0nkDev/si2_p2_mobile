@@ -77,38 +77,42 @@ class _AssistanceState extends State<Assistance> {
           SizedBox(height: 32,),
           Text("Historial de asistencias", style: style),
           SizedBox(height: 32,),
-          FutureBuilder (future: assistanceFuture, builder: (context, snapshot) { if (snapshot.hasData) { final items = snapshot.data;
-            if (items == null) return Text('item is null');
-            print(items);
-              return Column(
-                children: [
-                  FutureBuilder(future: todayFuture, builder: (context, today) { if (today.hasData) {
-                    if (today.data == null) { return ElevatedButton(onPressed: null, child: Text('Marcar')); }
-                    else if (today.data?['detail'] == null) {
-                      if (today.data?['status'] == 'E') {return ElevatedButton(onPressed: null, child: Text('Marcar'));}
-                      else {return ElevatedButton(onPressed: () {sendAssistance();}, child: Text('Marcar'));}
-                    }
-                    }
-                    return (ElevatedButton(onPressed: null, child: Text('Marcar')));
-                  }),
-                  SizedBox(height: 8),
-                  Container(alignment: Alignment.center, height: 32, width: 256, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text("${items['rude']} | ${items['lname']} ${items['name']}")),
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    Container(alignment: Alignment.center, height: 32, width: 128, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text("Fecha")),
-                    Container(alignment: Alignment.center, height: 32, width: 128, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text("Estado")),
-                  ],),
-                  ListView.builder(shrinkWrap: true, itemCount: items['assistances'].length, itemBuilder: (context, index) {
-                    final item = items['assistances'][index];
-                    return Row( mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(alignment: Alignment.center, height: 32, width: 128, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text(item['date'])),
-                        Container(alignment: Alignment.center, height: 32, width: 128, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text(item['status']))
-                      ],
-                    );
-                  }),
-                ],
-              );
-            } else {return Text('no data');}}
+          Expanded(
+            child: FutureBuilder (future: assistanceFuture, builder: (context, snapshot) { if (snapshot.hasData) { final items = snapshot.data;
+              if (items == null) return Text('item is null');
+              print(items);
+                return Column(
+                  children: [
+                    FutureBuilder(future: todayFuture, builder: (context, today) { if (today.hasData) {
+                      if (today.data == null) { return ElevatedButton(onPressed: null, child: Text('Marcar')); }
+                      else if (today.data?['detail'] == null) {
+                        if (today.data?['status'] == 'E') {return ElevatedButton(onPressed: null, child: Text('Marcar'));}
+                        else {return ElevatedButton(onPressed: () {sendAssistance();}, child: Text('Marcar'));}
+                      }
+                      }
+                      return (ElevatedButton(onPressed: null, child: Text('Marcar')));
+                    }),
+                    SizedBox(height: 8),
+                    Container(alignment: Alignment.center, height: 32, width: 256, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text("${items['rude']} | ${items['lname']} ${items['name']}")),
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                      Container(alignment: Alignment.center, height: 32, width: 128, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text("Fecha")),
+                      Container(alignment: Alignment.center, height: 32, width: 128, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text("Estado")),
+                    ],),
+                    Expanded(
+                      child: ListView.builder(shrinkWrap: true, itemCount: items['assistances'].length, itemBuilder: (context, index) {
+                        final item = items['assistances'][index];
+                        return Row( mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(alignment: Alignment.center, height: 32, width: 128, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text(item['date'])),
+                            Container(alignment: Alignment.center, height: 32, width: 128, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text(item['status']))
+                          ],
+                        );
+                      }),
+                    ),
+                  ],
+                );
+              } else {return Text('no data');}}
+            ),
           ),
         ],
       ),

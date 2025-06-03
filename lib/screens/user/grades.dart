@@ -101,28 +101,32 @@ class _AssistanceState extends State<Grades> {
           SizedBox(height: 32,),
           Text("Historial de notas", style: style),
           SizedBox(height: 32,),
-          FutureBuilder (future: scoresFuture, builder: (context, snapshot) { if (snapshot.hasData) { final items = snapshot.data;
-            if (items == null) return Text('item is null');
-            print(items);
-              return Column(
-                children: [
-                  Container(alignment: Alignment.center, height: 32, width: 256, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text("${items['rude']} | ${items['lname']} ${items['name']}")),
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    Container(alignment: Alignment.center, height: 32, width: 128, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text("Fecha")),
-                    Container(alignment: Alignment.center, height: 32, width: 128, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text("Estado")),
-                  ],),
-                  ListView.builder(shrinkWrap: true, itemCount: items['scores'].length, itemBuilder: (context, index) {
-                    final item = items['scores'][index];
-                    return Row( mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(alignment: Alignment.center, height: 32, width: 128, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text("${item['title']}")),
-                        Container(alignment: Alignment.center, height: 32, width: 128, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text(formatScore((item['score'].toDouble())))),
-                      ],
-                    );
-                  }),
-                ],
-              );
-            } else {return Text('no data');}}
+          Expanded(
+            child: FutureBuilder (future: scoresFuture, builder: (context, snapshot) { if (snapshot.hasData) { final items = snapshot.data;
+              if (items == null) return Text('item is null');
+              print(items);
+                return Column(
+                  children: [
+                    Container(alignment: Alignment.center, height: 32, width: 256, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text("${items['rude']} | ${items['lname']} ${items['name']}")),
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                      Container(alignment: Alignment.center, height: 32, width: 128, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text("Entrada")),
+                      Container(alignment: Alignment.center, height: 32, width: 128, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text("Nota")),
+                    ],),
+                    Expanded(
+                      child: ListView.builder(shrinkWrap: true, itemCount: items['scores'].length, itemBuilder: (context, index) {
+                        final item = items['scores'][index];
+                        return Row( mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(alignment: Alignment.center, height: 32, width: 128, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text("${item['title']}")),
+                            Container(alignment: Alignment.center, height: 32, width: 128, decoration: BoxDecoration(border: Border.all(color: Colors.black)), child: Text(formatScore((item['score'].toDouble())))),
+                          ],
+                        );
+                      }),
+                    ),
+                  ],
+                );
+              } else {return Text('no data');}}
+            ),
           ),
         ],
       ),
